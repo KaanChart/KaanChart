@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>KaanChart · BTCUSDT 1H</title>
+<style>
+  :root {
+    --bg: #0e1117;
+    --panel: #151a23;
+    --fg: #e6e9ef;
+    --muted: #8a93a6;
+    --gold: #f2b84b;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: system-ui, -apple-system, "Segoe UI", Tahoma, sans-serif;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    background: var(--panel);
+    border-bottom: 1px solid #232a36;
+  }
+  .brand { font-weight: 800; font-size: 20px; letter-spacing: .5px; }
+  .brand span { color: var(--gold); }
+  .meta { color: var(--muted); font-size: 13px; }
+  .stage { position: relative; flex: 1; min-height: 420px; }
+  #tv_chart { position: absolute; inset: 0; }
+
+  /* KaanChart watermark: sits above the chart but ignores the mouse,
+     so the chart stays fully interactive. */
+  .watermark {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+    z-index: 5;
+  }
+  .watermark b {
+    font-size: clamp(48px, 11vw, 160px);
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: rgba(242, 184, 75, .12);
+    transform: rotate(-14deg);
+    user-select: none;
+    white-space: nowrap;
+    direction: ltr;
+  }
+  .badge {
+    position: absolute;
+    left: 14px;
+    bottom: 44px;
+    z-index: 6;
+    pointer-events: none;
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba(14, 17, 23, .75);
+    border: 1px solid rgba(242, 184, 75, .45);
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 14px;
+    direction: ltr;
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="brand"><span>Kaan</span>Chart</div>
+    <div class="meta">BTC/USDT · Binance · فريم الساعة (1H) · بيانات مباشرة من TradingView</div>
+  </header>
+
+  <div class="stage">
+    <div id="tv_chart"></div>
+    <div class="watermark" aria-hidden="true"><b>KaanChart</b></div>
+    <div class="badge" aria-hidden="true">KaanChart</div>
+  </div>
+
+  <script src="https://s3.tradingview.com/tv.js"></script>
+  <script>
+    new TradingView.widget({
+      container_id: "tv_chart",
+      autosize: true,
+      symbol: "BINANCE:BTCUSDT",
+      interval: "60",            // 1 hour
+      timezone: "Etc/UTC",
+      theme: "dark",
+      style: "1",                // candles
+      locale: "ar_AE",
+      allow_symbol_change: true,
+      hide_side_toolbar: false,
+      withdateranges: true,
+      details: true,
+      studies: [
+        "MAExp@tv-basicstudies",   // EMA
+        "RSI@tv-basicstudies",
+        "Volume@tv-basicstudies"
+      ]
+    });
+  </script>
+</body>
+</html>
