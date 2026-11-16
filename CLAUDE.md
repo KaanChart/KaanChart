@@ -13,11 +13,22 @@ Always deliver the full KaanChart chart, never a bare candle chart:
    The chart combines price structure (HH/HL/LH/LL, BOS/CHoCH), order-book liquidity walls,
    cross-exchange liquidations, open interest and funding, with the KaanChart watermark.
 2. Look at the PNG once and send it to the user.
-3. Write a short public-facing analysis in Arabic from `kaanchart.json`:
-   - one-line summary of the move
-   - a table: structure, funding, long/short, 24h liquidations, liquidity walls
-   - key levels: close above the last swing high / below the last swing low, nearest walls
-   - end with: «هذا تحليل للتعليم وليس توصية مالية»
+3. Write the analysis from `kaanchart.json` as ONE ready-to-post tweet (no thread, no table),
+   in a code block so the user can copy it, at most 280 characters, all in Arabic
+   (no English terms like Long/Short, CHoCH, HH; say المشترين/البايعين, قمة/قاع):
+   ```
+   #بيتكوين فريم الساعة | <price>$
+
+   📉/📈 <structure in one line, and where price sits vs the last swing high/low>
+   🟢 إغلاق ساعة فوق <last swing high> = <meaning>، <nearest ask wall if it sits there>
+   🔴 إغلاق تحت <last swing low> = قاع جديد
+   🧱 جدار شراء <biggest bid wall> (<size> مليون$)
+   💥 تصفيات 24س: البايعين <short liq>M$ · المشترين <long liq>M$
+
+   تعليمي وليس توصية مالية
+   ```
+   The PNG is attached to the tweet. If the current hourly candle has not closed yet, say so
+   in one line outside the tweet.
 4. Only update `assets/btc-1h.png` in the repo (via a PR) when the user asks to update the profile.
 
 ## Data sources
