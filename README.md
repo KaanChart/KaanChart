@@ -1,12 +1,28 @@
-- 👋 Hi, I’m @GoldenDie
-- 👀 I’m interested in ...
-- 🌱 I’m currently learning ...
-- 💞️ I’m looking to collaborate on ...
-- 📫 How to reach me ...
-- 😄 Pronouns: ...
-- ⚡ Fun fact: ...
+<p align="center">
+  <img src="assets/profile-banner.png" alt="KaanChart" width="100%">
+</p>
 
-<!---
-GoldenDie/GoldenDie is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
+<div dir="rtl">
+
+## 👋 أهلًا، أنا KaanChart
+
+أحلّل سوق العملات الرقمية بالبيانات: الشارت، والهيكل السعري، والعقود الآجلة، وخرائط التصفيات.
+
+### 📊 وش تلقى عندي
+- **تحليل البيتكوين** على فريم الساعة واليومي
+- **الهيكل السعري**: القمم والقيعان، BOS وCHoCH
+- **العقود الآجلة**: العقود المفتوحة، والتمويل، ونسبة Long/Short
+- **خرائط التصفيات** ومناطق السيولة
+- **أخبار السوق** وتأثيرها، بدون تهويل
+
+### 📈 آخر شارت
+
+<img src="assets/btc-1h.png" alt="BTC 1H" width="100%">
+
+### 📬 تابعني
+- تيليجرام: [t.me/kaanchart](https://t.me/kaanchart)
+- إكس: [@kaanchart](https://x.com/kaanchart)
+
+> ⚠️ كل المحتوى للتعليم فقط، وليس توصية مالية.
+
+</div>
