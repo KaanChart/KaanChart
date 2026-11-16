@@ -1,5 +1,6 @@
-"""KaanChart indicators: BTC/USDT 1H price structure, order-book liquidity walls,
-and derivatives data across exchanges, in one chart plus a JSON summary.
+"""KaanChart indicators: BTC/USDT 1H price structure with Fibonacci retracements and
+break volume, order-book liquidity walls, and derivatives data across exchanges
+(liquidations, open interest and its 24h change, funding), in one chart plus a JSON summary.
 
 Usage:
     python scripts/kaanchart.py assets/btc-1h.png data/kaanchart.json [README.md]
@@ -114,6 +115,28 @@ def structure(H, L, C, n=4):
     return alt, labels, events, trend, lastHigh, lastLow
 
 
+FIB = (0.382, 0.5, 0.618, 0.786)
+
+
+def fib_leg(H, L, start):
+    """Retracement levels of the largest move in the visible window (highest high to lowest low)."""
+    hi_i = max(range(start, len(H)), key=lambda i: H[i])
+    lo_i = min(range(start, len(L)), key=lambda i: L[i])
+    hi, lo = H[hi_i], L[lo_i]
+    down = hi_i < lo_i  # the high came first: the leg is down, retracements are measured up from the low
+    lv = [(r, lo + r * (hi - lo) if down else hi - r * (hi - lo)) for r in FIB]
+    return {"dir": "dn" if down else "up", "high": hi, "low": lo, "high_i": hi_i, "low_i": lo_i, "levels": lv}
+
+
+def break_volume(V, events, n=20):
+    """Volume of each break candle relative to the average of the n candles before it."""
+    out = []
+    for s, i, name, dr in events:
+        base = V[max(0, i - n):i]
+        out.append(V[i] / (sum(base) / len(base)) if base and sum(base) else None)
+    return out
+
+
 # ---------------------------------------------------------------- order books
 BUCKET, RANGE, NEAR = 100, 0.03, 0.004
 
@@ -191,6 +214,7 @@ def coinalyze():
         oi = batch("open-interest", convert_to_usd="true")
         fr = batch("funding-rate")
         lq = batch("liquidation-history", interval="1hour", convert_to_usd="true", **{"from": now - 72 * 3600, "to": now})
+        oih = batch("open-interest-history", interval="1hour", convert_to_usd="true", **{"from": now - 120 * 3600, "to": now})
     except Exception as e:  # noqa: BLE001
         print("coinalyze failed:", e)
         return None
@@ -210,7 +234,22 @@ def coinalyze():
             hourly[h["t"]][0] += h["l"]
             hourly[h["t"]][1] += h["s"]
     last24 = [v for t, v in hourly.items() if t >= now - 24 * 3600]
+    # Sum OI across symbols per hour; keep only hours every symbol reported, so the total does not jump.
+    oi_t, oi_n = defaultdict(float), defaultdict(int)
+    for x in oih:
+        for h in x["history"]:
+            oi_t[h["t"]] += h["c"]
+            oi_n[h["t"]] += 1
+    full = max(oi_n.values()) if oi_n else 0
+    oi_hist = sorted((t, v) for t, v in oi_t.items() if oi_n[t] >= full * 0.95)
+    oi_chg = None
+    if oi_hist:
+        t_end, v_end = oi_hist[-1]
+        past = [v for t, v in oi_hist if t <= t_end - 24 * 3600]
+        oi_chg = (v_end / past[-1] - 1) * 100 if past else None
     return {
+        "oi_change_24h_pct": oi_chg,
+        "oi_hourly": oi_hist,
         "oi_total_usd": sum(oi_by.values()),
         "oi_by_exchange_usd": dict(sorted(oi_by.items(), key=lambda kv: -kv[1])),
         "funding_8h_pct_oi_weighted": funding,
@@ -237,6 +276,10 @@ def reading(trend, ev, px, lastHigh, lastLow, deriv, ls, bids, asks):
     if deriv:
         L, S = deriv["liq_24h_long_usd"], deriv["liq_24h_short_usd"]
         out.append(("تصفيات 24 ساعة", "Long أكثر" if L > S else "Short أكثر", f"Long {L / 1e6:.1f}M$ · Short {S / 1e6:.1f}M$"))
+        chg = deriv.get("oi_change_24h_pct")
+        if chg is not None:
+            out.append(("العقود المفتوحة", "زايدة" if chg > 0 else "نازلة",
+                        f"{deriv['oi_total_usd'] / 1e9:.1f} مليار$ ({chg:+.1f}% خلال 24 ساعة)"))
     if bids and asks:
         bv, av = sum(v for _, v in bids), sum(v for _, v in asks)
         out.append(("جدران الأوامر", "شراء أثقل" if bv > av * 1.2 else "بيع أثقل" if av > bv * 1.2 else "متقاربة",
@@ -252,11 +295,12 @@ def reading(trend, ev, px, lastHigh, lastLow, deriv, ls, bids, asks):
 # ---------------------------------------------------------------- chart
 BG, FG, MU, GR = "#0e1117", "#e6e9ef", "#8a93a6", "#232a36"
 UP, DN, GOLD = "#26a69a", "#ef5350", "#f2b84b"
+FIB_C, OI_C = "#9f8cf0", "#5aa9e6"
 
 
-def draw(path, k, src, alt, labels, events, agg, bids, asks, deriv, books):
+def draw(path, k, src, alt, labels, events, agg, bids, asks, deriv, books, fib, bvol):
     T = [d.datetime.fromtimestamp(r[0] / 1000, d.UTC) + d.timedelta(minutes=30) for r in k]
-    O, H, L, C = ([r[i] for r in k] for i in (1, 2, 3, 4))
+    O, H, L, C, V = ([float(r[i]) for r in k] for i in (1, 2, 3, 4, 5))
     N, cut, px = len(k), len(k) - 120, k[-1][4]
     plt.rcParams.update({"font.size": 11, "text.color": FG, "xtick.color": MU, "ytick.color": MU})
     fig = plt.figure(figsize=(16, 11), facecolor=BG)
@@ -285,12 +329,28 @@ def draw(path, k, src, alt, labels, events, agg, bids, asks, deriv, books):
         if p[0] >= cut and t:
             ax.annotate(t, (T[p[0]], p[2]), xytext=(0, 9 if p[1] == "H" else -16), textcoords="offset points",
                         ha="center", fontsize=9, fontweight="bold", color=UP if t in ("HH", "HL") else DN)
-    for s, i, name, dr in events:
+    for (s, i, name, dr), vr in zip(events, bvol):
         if i >= cut:
             col, x0 = (UP if dr == "up" else DN), T[max(s[0], cut)]
             ax.hlines(s[2], x0, T[i], color=col, lw=1.1, ls="--")
-            ax.text(x0 + (T[i] - x0) / 2, s[2], name, color=col, ha="center",
+            tag = name + (f" · vol ×{vr:.1f}" if vr else "")
+            ax.text(x0 + (T[i] - x0) / 2, s[2], tag, color=col, ha="center",
                     va="bottom" if dr == "up" else "top", fontsize=9, fontweight="bold")
+    # Volume: faint bars along the bottom of the price panel, break candles highlighted.
+    axv = ax.twinx()
+    axv.set_ylim(0, max(V[cut:]) * 6.5)
+    axv.axis("off")
+    brk = {i for _, i, _, _ in events}
+    axv.bar(T[cut:], V[cut:], width=w, color=[GOLD if i in brk else (UP if C[i] >= O[i] else DN)
+                                                for i in range(cut, N)],
+            alpha=.28, zorder=0)
+    # Fibonacci retracements of the largest move in view.
+    if fib:
+        x0 = T[max(fib["high_i"], fib["low_i"])]
+        for r, y in fib["levels"]:
+            ax.hlines(y, x0, T[-1] + d.timedelta(hours=14), color=FIB_C, lw=.9, ls=(0, (6, 3)), alpha=.8)
+            ax.text(T[-1] + d.timedelta(hours=13.5), y, f"{r:.3f}  {y:,.0f}", color=FIB_C, fontsize=8.5,
+                    ha="right", va="bottom")
     for b, v in bids + asks:
         col = UP if b < px else DN
         ax.axhline(b, color=col, lw=1.6, alpha=.55, ls=":")
@@ -315,6 +375,17 @@ def draw(path, k, src, alt, labels, events, agg, bids, asks, deriv, books):
         axl.bar(lt, [-s / 1e6 for _, _, s in deriv["liq_hourly"]], width=w, color=UP, label="Short liquidated")
         axl.axhline(0, color=MU, lw=.6)
         axl.set_ylabel("Liquidations $M", color=MU)
+        if deriv.get("oi_hourly"):
+            axo = axl.twinx()
+            ot = [d.datetime.fromtimestamp(t, d.UTC) + d.timedelta(minutes=30) for t, _ in deriv["oi_hourly"]]
+            ov = [v / 1e9 for _, v in deriv["oi_hourly"]]
+            axo.plot(ot, ov, color=OI_C, lw=1.6, label="Open interest $B")
+            span = (max(ov) - min(ov)) or 1
+            axo.set_ylim(min(ov) - span * .1, max(ov) + span * .45)  # headroom keeps the line under the legends
+            axo.tick_params(axis="y", colors=OI_C, labelsize=8.5, direction="in", pad=-26, length=0)
+            for s in axo.spines.values():
+                s.set_visible(False)
+            axo.legend(loc="upper right", fontsize=8, frameon=False, labelcolor=FG)
         axl.legend(loc="upper left", fontsize=8, frameon=False, labelcolor=FG)
     else:
         axl.text(.5, .5, "Cross-exchange liquidations need COINALYZE_API_KEY", transform=axl.transAxes,
@@ -324,11 +395,14 @@ def draw(path, k, src, alt, labels, events, agg, bids, asks, deriv, books):
 
     lines = [f"Last  {px:,.0f}"]
     if deriv:
-        lines += [f"OI all exch  ${deriv['oi_total_usd'] / 1e9:.1f}B"]
+        chg = deriv.get("oi_change_24h_pct")
+        lines += [f"OI all exch  ${deriv['oi_total_usd'] / 1e9:.1f}B" + (f"  24h {chg:+.1f}%" if chg is not None else "")]
         lines += [f"  {n:<12}${v / 1e9:.1f}B" for n, v in list(deriv["oi_by_exchange_usd"].items())[:4]]
         if deriv["funding_8h_pct_oi_weighted"] is not None:
             lines += [f"Funding 8h  {deriv['funding_8h_pct_oi_weighted']:+.4f}%"]
         lines += [f"Liq 24h  L ${deriv['liq_24h_long_usd'] / 1e6:.0f}M  S ${deriv['liq_24h_short_usd'] / 1e6:.0f}M"]
+    if events and bvol[-1]:
+        lines += [f"Last {events[-1][2]} vol  ×{bvol[-1]:.1f} avg20"]
     lines += ["Ask walls"] + [f"  {b:,.0f}  ${v / 1e6:.0f}M" for b, v in sorted(asks, reverse=True)]
     lines += ["Bid walls"] + [f"  {b:,.0f}  ${v / 1e6:.0f}M" for b, v in sorted(bids, reverse=True)]
     axt.text(.04, .96, "\n".join(lines).replace("$", r"\$"), transform=axt.transAxes, va="top", ha="left", family="monospace",
@@ -374,7 +448,10 @@ def main():
     ls = okx_long_short()
     deriv = coinalyze()
     rows, levels = reading(trend, events, px, lastHigh, lastLow, deriv, ls, bids, asks)
-    draw(png, k, src, alt, labels, events, agg, bids, asks, deriv, books)
+    fib = fib_leg(H, L, len(k) - 120)
+    bvol = break_volume([float(r[5]) for r in k], events)
+    draw(png, k, src, alt, labels, events, agg, bids, asks, deriv, books, fib, bvol)
+    c24 = C[-25] if len(C) > 24 else None
     stamp = d.datetime.fromtimestamp(k[-1][0] / 1000, d.UTC).strftime("%Y-%m-%d %H:00")
     os.makedirs(os.path.dirname(js) or ".", exist_ok=True)
     out = {
@@ -385,7 +462,11 @@ def main():
         "liquidity_walls": {"bids": [{"price": b, "usd": v} for b, v in bids],
                             "asks": [{"price": b, "usd": v} for b, v in asks], "books": list(books)},
         "okx_long_short_accounts": ls,
-        "derivatives": ({kk: vv for kk, vv in deriv.items() if kk != "liq_hourly"} if deriv else None),
+        "derivatives": ({kk: vv for kk, vv in deriv.items() if kk not in ("liq_hourly", "oi_hourly")} if deriv else None),
+        "price_change_24h_pct": (px / c24 - 1) * 100 if c24 else None,
+        "fib": {"leg": fib["dir"], "high": fib["high"], "low": fib["low"],
+                "levels": [{"ratio": r, "price": round(y, 2)} for r, y in fib["levels"]]},
+        "last_break_volume_x_avg20": bvol[-1] if bvol else None,
         "reading": [{"indicator": a, "state": b, "detail": c} for a, b, c in rows],
         "levels": levels,
         "note": "Indicator reading, not financial advice.",
