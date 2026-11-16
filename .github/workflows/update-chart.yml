@@ -31,6 +31,12 @@ jobs:
           COINALYZE_API_KEY: ${{ secrets.COINALYZE_API_KEY }}
         run: python scripts/kaanchart.py assets/btc-1h.png data/kaanchart.json README.md
 
+      - name: Post to Telegram
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python scripts/telegram_post.py assets/btc-1h.png data/kaanchart.json
+
       - name: Commit chart
         run: |
           git config user.name "kaanchart-bot"
