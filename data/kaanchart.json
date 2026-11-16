@@ -1,0 +1,105 @@
+{
+  "updated_utc": "2026-11-16 20:00",
+  "price": 64970.01,
+  "candle_source": "Binance",
+  "structure": {
+    "trend": -1,
+    "last_swing_high": 65696.16,
+    "last_swing_low": 63905.01,
+    "last_event": {
+      "type": "CHoCH",
+      "dir": "dn",
+      "level": 64257.65
+    }
+  },
+  "liquidity_walls": {
+    "bids": [
+      {
+        "price": 64700,
+        "usd": 64190818.48443796
+      },
+      {
+        "price": 64500,
+        "usd": 51046973.68420306
+      },
+      {
+        "price": 64600,
+        "usd": 48489320.65975089
+      }
+    ],
+    "asks": [
+      {
+        "price": 65300,
+        "usd": 43609813.77229686
+      },
+      {
+        "price": 65500,
+        "usd": 39120556.76958717
+      },
+      {
+        "price": 65400,
+        "usd": 36105518.116348125
+      }
+    ],
+    "books": [
+      "OKX perp",
+      "OKX spot",
+      "Binance spot",
+      "Hyperliquid",
+      "Gate perp"
+    ]
+  },
+  "okx_long_short_accounts": 2.65,
+  "derivatives": {
+    "oi_total_usd": 21520932039.25361,
+    "oi_by_exchange_usd": {
+      "Binance": 8638095644.951801,
+      "Bybit": 5307885852.351199,
+      "OKX": 2694354741.665768,
+      "Hyperliquid": 2460536183.9352,
+      "Deribit": 854838110.43606,
+      "Huobi": 811622541.3728,
+      "Bitfinex": 576432939.7299002,
+      "Kraken": 149219082.06,
+      "WOO X": 14565833.229379999,
+      "dYdX": 13381109.5215
+    },
+    "funding_8h_pct_oi_weighted": 0.00721297091701474,
+    "liq_24h_long_usd": 19209951.97843714,
+    "liq_24h_short_usd": 30193938.271925043,
+    "liq_72h_long_usd": 442923060.2214747,
+    "liq_72h_short_usd": 122813956.80481184
+  },
+  "reading": [
+    {
+      "indicator": "الهيكل",
+      "state": "هابط",
+      "detail": "آخر إشارة CHoCH هابط عند 64,258"
+    },
+    {
+      "indicator": "التمويل",
+      "state": "طبيعي",
+      "detail": "+0.0072% لكل 8 ساعات"
+    },
+    {
+      "indicator": "Long/Short (OKX)",
+      "state": "مزدحم Long",
+      "detail": "2.65"
+    },
+    {
+      "indicator": "تصفيات 24 ساعة",
+      "state": "Short أكثر",
+      "detail": "Long 19.2M$ · Short 30.2M$"
+    },
+    {
+      "indicator": "جدران الأوامر",
+      "state": "شراء أثقل",
+      "detail": "شراء 64,700 (64M$) · بيع 65,300 (44M$)"
+    }
+  ],
+  "levels": [
+    "إغلاق ساعة فوق 65,696 يكسر آخر قمة",
+    "إغلاق ساعة تحت 63,905 يكسر آخر قاع"
+  ],
+  "note": "Indicator reading, not financial advice."
+}
