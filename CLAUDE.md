@@ -22,14 +22,17 @@ Always deliver the full KaanChart chart, never a bare candle chart:
    #بيتكوين فريم الساعة | <price>$
 
    📉/📈 <structure in one line, and where price sits vs the last swing high/low>
-   🟢 إغلاق ساعة فوق <last swing high> = كسر للهيكل، وعندها جدار بيع <nearest ask wall> وفيبو <nearest fib level above>
+   🟢 إغلاق فوقها = كسر للهيكل، جدار بيع <biggest ask wall> وفيبو <ratio> عند <nearest fib level above the high>
    🔴 إغلاق تحت <last swing low> = قاع جديد
-   🧱 جدار شراء <biggest bid wall> (<size> مليون$)
-   💥 تصفيات 24س: البايعين <short liq>M$ · المشترين <long liq>M$
+   - جدار شراء <biggest bid wall> (<size> مليون$)
+   - تصفيات 24س: البايعين <short liq>M$ · المشترين <long liq>M$
+
+   $BTC #BTC
 
    تعليمي وليس توصية مالية
    ```
-   Count the length as X does (emoji count 2) and trim wording if it goes over 280.
+   Count the length as X does (emoji count 2). Over 280: first write the Fibonacci as
+   «وفيبو 0.382 (66,671)», then drop it. `scripts/post_x.py` builds exactly this text.
    Then a Telegram post in a second code block (no length limit, same Arabic-only rule):
    ```
    #بيتكوين | فريم الساعة | <price>$
@@ -57,6 +60,15 @@ Always deliver the full KaanChart chart, never a bare candle chart:
    below ×1.2 a weak one. The PNG is attached to both. If the current hourly candle has not
    closed yet, say so in one line outside the posts.
 4. Only update `assets/btc-1h.png` in the repo (via a PR) when the user asks to update the profile.
+
+## Daily post on X
+
+`.github/workflows/post-x.yml` posts the chart and the tweet to x.com/kaanchart every day at
+06:03 UTC (9 AM Gulf time) with no review. `scripts/post_x.py` builds the tweet from the JSON in
+the format above and refuses to post when the Coinalyze data is missing. A manual run from the
+Actions tab is a dry run by default. It needs the repository secrets `COINALYZE_API_KEY`,
+`X_API_KEY`, `X_API_SECRET`, `X_ACCESS_TOKEN` and `X_ACCESS_TOKEN_SECRET`. If you change the
+tweet format above, change `build_tweet` in `scripts/post_x.py` to match.
 
 ## Data sources
 
