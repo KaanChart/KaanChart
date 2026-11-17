@@ -58,6 +58,15 @@ Always deliver the full KaanChart chart, never a bare candle chart:
    closed yet, say so in one line outside the posts.
 4. Only update `assets/btc-1h.png` in the repo (via a PR) when the user asks to update the profile.
 
+## Daily post on X
+
+`.github/workflows/post-x.yml` posts the chart and the tweet to x.com/kaanchart every day at
+06:03 UTC (9 AM Gulf time) with no review. `scripts/post_x.py` builds the tweet from the JSON in
+the format above and refuses to post when the Coinalyze data is missing. A manual run from the
+Actions tab is a dry run by default. It needs the repository secrets `COINALYZE_API_KEY`,
+`X_API_KEY`, `X_API_SECRET`, `X_ACCESS_TOKEN` and `X_ACCESS_TOKEN_SECRET`. If you change the
+tweet format above, change `build_tweet` in `scripts/post_x.py` to match.
+
 ## Data sources
 
 - Candles and spot book: `data-api.binance.vision` (Binance's main and futures APIs are geo-blocked here).

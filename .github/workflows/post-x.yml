@@ -1,0 +1,58 @@
+name: Post daily KaanChart to X
+
+on:
+  schedule:
+    - cron: "3 6 * * *"   # daily at 06:03 UTC = 9:03 AM Gulf time (UTC+3)
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Build the chart and tweet without posting"
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: post-x
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install matplotlib
+        run: pip install matplotlib==3.9.2
+
+      - name: Draw chart and indicators
+        env:
+          COINALYZE_API_KEY: ${{ secrets.COINALYZE_API_KEY }}
+        run: python scripts/kaanchart.py "$RUNNER_TEMP/btc-1h.png" "$RUNNER_TEMP/kaanchart.json"
+
+      - name: Post to X
+        shell: bash   # explicit bash runs with pipefail, so a failed post fails the job despite tee
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run && '--dry-run' || '' }}
+        run: python scripts/post_x.py "$RUNNER_TEMP/kaanchart.json" "$RUNNER_TEMP/btc-1h.png" $DRY_RUN | tee "$RUNNER_TEMP/tweet.txt"
+
+      - name: Keep the chart and tweet
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: kaanchart-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/btc-1h.png
+            ${{ runner.temp }}/kaanchart.json
+            ${{ runner.temp }}/tweet.txt
+          if-no-files-found: ignore
