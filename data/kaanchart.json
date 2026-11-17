@@ -1,6 +1,6 @@
 {
-  "updated_utc": "2026-11-16 20:00",
-  "price": 64970.01,
+  "updated_utc": "2026-11-17 07:00",
+  "price": 64586.85,
   "candle_source": "Binance",
   "structure": {
     "trend": -1,
@@ -15,30 +15,30 @@
   "liquidity_walls": {
     "bids": [
       {
-        "price": 64700,
-        "usd": 64190818.48443796
+        "price": 64200,
+        "usd": 56037232.30505462
       },
       {
-        "price": 64500,
-        "usd": 51046973.68420306
+        "price": 64300,
+        "usd": 49248221.29182076
       },
       {
-        "price": 64600,
-        "usd": 48489320.65975089
+        "price": 64000,
+        "usd": 46477155.49215889
       }
     ],
     "asks": [
       {
-        "price": 65300,
-        "usd": 43609813.77229686
+        "price": 65000,
+        "usd": 49083321.105971955
       },
       {
-        "price": 65500,
-        "usd": 39120556.76958717
+        "price": 65100,
+        "usd": 43194193.223414235
       },
       {
-        "price": 65400,
-        "usd": 36105518.116348125
+        "price": 64900,
+        "usd": 41757531.73636998
       }
     ],
     "books": [
@@ -49,27 +49,33 @@
       "Gate perp"
     ]
   },
-  "okx_long_short_accounts": 2.65,
-  "derivatives": {
-    "oi_total_usd": 21520932039.25361,
-    "oi_by_exchange_usd": {
-      "Binance": 8638095644.951801,
-      "Bybit": 5307885852.351199,
-      "OKX": 2694354741.665768,
-      "Hyperliquid": 2460536183.9352,
-      "Deribit": 854838110.43606,
-      "Huobi": 811622541.3728,
-      "Bitfinex": 576432939.7299002,
-      "Kraken": 149219082.06,
-      "WOO X": 14565833.229379999,
-      "dYdX": 13381109.5215
-    },
-    "funding_8h_pct_oi_weighted": 0.00721297091701474,
-    "liq_24h_long_usd": 19209951.97843714,
-    "liq_24h_short_usd": 30193938.271925043,
-    "liq_72h_long_usd": 442923060.2214747,
-    "liq_72h_short_usd": 122813956.80481184
+  "okx_long_short_accounts": 2.79,
+  "derivatives": null,
+  "price_change_24h_pct": -0.628154852241225,
+  "fib": {
+    "leg": "dn",
+    "high": 73696.86,
+    "low": 62006.0,
+    "levels": [
+      {
+        "ratio": 0.382,
+        "price": 66471.91
+      },
+      {
+        "ratio": 0.5,
+        "price": 67851.43
+      },
+      {
+        "ratio": 0.618,
+        "price": 69230.95
+      },
+      {
+        "ratio": 0.786,
+        "price": 71195.02
+      }
+    ]
   },
+  "last_break_volume_x_avg20": 1.1491050554293807,
   "reading": [
     {
       "indicator": "الهيكل",
@@ -77,24 +83,14 @@
       "detail": "آخر إشارة CHoCH هابط عند 64,258"
     },
     {
-      "indicator": "التمويل",
-      "state": "طبيعي",
-      "detail": "+0.0072% لكل 8 ساعات"
-    },
-    {
       "indicator": "Long/Short (OKX)",
       "state": "مزدحم Long",
-      "detail": "2.65"
-    },
-    {
-      "indicator": "تصفيات 24 ساعة",
-      "state": "Short أكثر",
-      "detail": "Long 19.2M$ · Short 30.2M$"
+      "detail": "2.79"
     },
     {
       "indicator": "جدران الأوامر",
-      "state": "شراء أثقل",
-      "detail": "شراء 64,700 (64M$) · بيع 65,300 (44M$)"
+      "state": "متقاربة",
+      "detail": "شراء 64,200 (56M$) · بيع 65,000 (49M$)"
     }
   ],
   "levels": [
