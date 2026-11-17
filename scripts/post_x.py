@@ -69,33 +69,41 @@ def build_tweet(d):
     else:
         where = f"والسعر تحت آخر قاع {fmt(lo)}"
 
-    asks = sorted(d["liquidity_walls"]["asks"], key=lambda w: w["price"])
+    asks = sorted(d["liquidity_walls"]["asks"], key=lambda w: -w["usd"])  # biggest wall, like the bid line
     bids = sorted(d["liquidity_walls"]["bids"], key=lambda w: -w["usd"])
     fib_up = sorted((lv for lv in (d.get("fib") or {}).get("levels", []) if lv["price"] > px),
                     key=lambda lv: lv["price"])
 
     meaning = "استمرار للصعود" if trend == 1 else "كسر للهيكل"
     extras = []
-    if asks:  # the nearest sell wall either stands before the high or at/after it
-        extras.append(("وقبلها" if asks[0]["price"] < hi * 0.999 else "وعندها") + f" جدار بيع {fmt(asks[0]['price'])}")
+    if asks:
+        extras.append(f"جدار بيع {fmt(asks[0]['price'])}")
     fib_up = [lv for lv in fib_up if lv["price"] > hi] or fib_up
+    fib_short = None
     if fib_up:
-        extras.append(f"وفوقها فيبو {fib_up[0]['ratio']:g} عند {fmt(fib_up[0]['price'])}")
+        extras.append(f"فيبو {fib_up[0]['ratio']:g} عند {fmt(fib_up[0]['price'])}")
+        fib_short = f"فيبو {fib_up[0]['ratio']:g} ({fmt(fib_up[0]['price'])})"
 
     def compose(extras):
-        green = f"🟢 إغلاق ساعة فوق {fmt(hi)} = {meaning}" + ("، " + " ".join(extras) if extras else "")
+        # "فوقها" refers back to the last high named on the structure line.
+        ref = "فوقها" if hi and px < hi else f"فوق {fmt(hi)}"
+        green = f"🟢 إغلاق {ref} = {meaning}" + ("، " + " و".join(extras) if extras else "")
         lines = [f"#بيتكوين فريم الساعة | {fmt(px)}$", "",
                  f"{icon} الهيكل {word} {where}", green,
                  f"🔴 إغلاق تحت {fmt(lo)} = قاع جديد"]
         if bids:
-            lines.append(f"🧱 جدار شراء {fmt(bids[0]['price'])} ({bids[0]['usd'] / 1e6:.0f} مليون$)")
-        lines += [f"💥 تصفيات 24س: البايعين {deriv['liq_24h_short_usd'] / 1e6:.0f}M$"
+            lines.append(f"- جدار شراء {fmt(bids[0]['price'])} ({bids[0]['usd'] / 1e6:.0f} مليون$)")
+        lines += [f"- تصفيات 24س: البايعين {deriv['liq_24h_short_usd'] / 1e6:.0f}M$"
                   f" · المشترين {deriv['liq_24h_long_usd'] / 1e6:.0f}M$",
+                  "", "$BTC #BTC",
                   "", "تعليمي وليس توصية مالية"]
         return "\n".join(lines)
 
     text = compose(extras)
-    while x_length(text) > LIMIT and extras:  # drop the least important detail first
+    if x_length(text) > LIMIT and fib_short:  # first shorten the Fibonacci wording
+        extras[-1] = fib_short
+        text = compose(extras)
+    while x_length(text) > LIMIT and extras:  # then drop the least important detail
         extras.pop()
         text = compose(extras)
     if x_length(text) > LIMIT:
