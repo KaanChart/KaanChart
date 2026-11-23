@@ -1,44 +1,44 @@
 {
-  "updated_utc": "2026-11-22 06:00",
-  "price": 59026.46,
+  "updated_utc": "2026-11-23 07:00",
+  "price": 61455.21,
   "candle_source": "Binance",
   "structure": {
-    "trend": -1,
-    "last_swing_high": 60996.0,
-    "last_swing_low": 55130.0,
+    "trend": 1,
+    "last_swing_high": 61959.93,
+    "last_swing_low": 60386.0,
     "last_event": {
       "type": "BOS",
-      "dir": "dn",
-      "level": 61290.58
+      "dir": "up",
+      "level": 61669.99
     }
   },
   "liquidity_walls": {
     "bids": [
       {
-        "price": 58600,
-        "usd": 55497117.45587373
+        "price": 61200,
+        "usd": 57596852.762749314
       },
       {
-        "price": 58700,
-        "usd": 45845081.904762104
+        "price": 61100,
+        "usd": 44324982.58496742
       },
       {
-        "price": 58500,
-        "usd": 34868891.989432
+        "price": 61000,
+        "usd": 37094586.2612115
       }
     ],
     "asks": [
       {
-        "price": 59400,
-        "usd": 51396939.817315266
+        "price": 61800,
+        "usd": 36560871.565734304
       },
       {
-        "price": 59300,
-        "usd": 44609124.7066735
+        "price": 61900,
+        "usd": 36120079.34976289
       },
       {
-        "price": 59600,
-        "usd": 30622102.208831955
+        "price": 62000,
+        "usd": 35209437.03330772
       }
     ],
     "books": [
@@ -49,53 +49,53 @@
       "Gate perp"
     ]
   },
-  "okx_long_short_accounts": 2.08,
+  "okx_long_short_accounts": 2.16,
   "derivatives": null,
-  "price_change_24h_pct": 1.652840327960714,
+  "price_change_24h_pct": 3.8620740706188705,
   "fib": {
     "leg": "dn",
-    "high": 65447.0,
+    "high": 64884.0,
     "low": 55130.0,
     "levels": [
       {
         "ratio": 0.382,
-        "price": 59071.09
+        "price": 58856.03
       },
       {
         "ratio": 0.5,
-        "price": 60288.5
+        "price": 60007.0
       },
       {
         "ratio": 0.618,
-        "price": 61505.91
+        "price": 61157.97
       },
       {
         "ratio": 0.786,
-        "price": 63239.16
+        "price": 62796.64
       }
     ]
   },
-  "last_break_volume_x_avg20": 6.2772971414284795,
+  "last_break_volume_x_avg20": 0.7769796386121761,
   "reading": [
     {
       "indicator": "الهيكل",
-      "state": "هابط",
-      "detail": "آخر إشارة BOS هابط عند 61,291"
+      "state": "صاعد",
+      "detail": "آخر إشارة BOS صاعد عند 61,670"
     },
     {
       "indicator": "Long/Short (OKX)",
       "state": "متوازن",
-      "detail": "2.08"
+      "detail": "2.16"
     },
     {
       "indicator": "جدران الأوامر",
-      "state": "متقاربة",
-      "detail": "شراء 58,600 (55M$) · بيع 59,400 (51M$)"
+      "state": "شراء أثقل",
+      "detail": "شراء 61,200 (58M$) · بيع 61,800 (37M$)"
     }
   ],
   "levels": [
-    "إغلاق ساعة فوق 60,996 يكسر آخر قمة",
-    "إغلاق ساعة تحت 55,130 يكسر آخر قاع"
+    "إغلاق ساعة فوق 61,960 يكسر آخر قمة",
+    "إغلاق ساعة تحت 60,386 يكسر آخر قاع"
   ],
   "note": "Indicator reading, not financial advice."
 }
