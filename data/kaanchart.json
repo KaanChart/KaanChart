@@ -1,44 +1,44 @@
 {
-  "updated_utc": "2026-11-26 08:00",
-  "price": 60595.82,
+  "updated_utc": "2026-11-27 08:00",
+  "price": 61912.2,
   "candle_source": "Binance",
   "structure": {
     "trend": 1,
-    "last_swing_high": 61622.38,
-    "last_swing_low": 57300.38,
+    "last_swing_high": 61006.0,
+    "last_swing_low": 60390.65,
     "last_event": {
-      "type": "CHoCH",
+      "type": "BOS",
       "dir": "up",
-      "level": 59489.63
+      "level": 61006.0
     }
   },
   "liquidity_walls": {
     "bids": [
       {
-        "price": 60200,
-        "usd": 60990814.317482136
+        "price": 61400,
+        "usd": 58814942.84386888
       },
       {
-        "price": 60300,
-        "usd": 56327558.06534904
+        "price": 61500,
+        "usd": 54109263.451575294
       },
       {
-        "price": 60000,
-        "usd": 53132362.16255237
+        "price": 61600,
+        "usd": 48793962.12705815
       }
     ],
     "asks": [
       {
-        "price": 61000,
-        "usd": 58032436.76851673
+        "price": 62200,
+        "usd": 88343078.52006352
       },
       {
-        "price": 60900,
-        "usd": 50385488.335932165
+        "price": 62300,
+        "usd": 52752144.55948073
       },
       {
-        "price": 61100,
-        "usd": 29432054.513505496
+        "price": 62600,
+        "usd": 43541375.09166282
       }
     ],
     "books": [
@@ -49,9 +49,9 @@
       "Gate perp"
     ]
   },
-  "okx_long_short_accounts": 2.47,
+  "okx_long_short_accounts": 2.42,
   "derivatives": null,
-  "price_change_24h_pct": 1.9577576360859883,
+  "price_change_24h_pct": 1.6605332070517065,
   "fib": {
     "leg": "dn",
     "high": 64603.12,
@@ -75,27 +75,27 @@
       }
     ]
   },
-  "last_break_volume_x_avg20": 2.1303685251315785,
+  "last_break_volume_x_avg20": 3.1413240412745598,
   "reading": [
     {
       "indicator": "الهيكل",
       "state": "صاعد",
-      "detail": "آخر إشارة CHoCH صاعد عند 59,490"
+      "detail": "آخر إشارة BOS صاعد عند 61,006"
     },
     {
       "indicator": "Long/Short (OKX)",
       "state": "متوازن",
-      "detail": "2.47"
+      "detail": "2.42"
     },
     {
       "indicator": "جدران الأوامر",
-      "state": "شراء أثقل",
-      "detail": "شراء 60,200 (61M$) · بيع 61,000 (58M$)"
+      "state": "متقاربة",
+      "detail": "شراء 61,400 (59M$) · بيع 62,200 (88M$)"
     }
   ],
   "levels": [
-    "إغلاق ساعة فوق 61,622 يكسر آخر قمة",
-    "إغلاق ساعة تحت 57,300 يكسر آخر قاع"
+    "إغلاق ساعة فوق 61,006 يكسر آخر قمة",
+    "إغلاق ساعة تحت 60,391 يكسر آخر قاع"
   ],
   "note": "Indicator reading, not financial advice."
 }
