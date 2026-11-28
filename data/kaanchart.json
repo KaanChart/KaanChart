@@ -1,44 +1,44 @@
 {
-  "updated_utc": "2026-11-27 08:00",
-  "price": 61912.2,
+  "updated_utc": "2026-11-28 07:00",
+  "price": 59712.43,
   "candle_source": "Binance",
   "structure": {
-    "trend": 1,
-    "last_swing_high": 61006.0,
-    "last_swing_low": 60390.65,
+    "trend": -1,
+    "last_swing_high": 60266.01,
+    "last_swing_low": 58792.37,
     "last_event": {
-      "type": "BOS",
-      "dir": "up",
-      "level": 61006.0
+      "type": "CHoCH",
+      "dir": "dn",
+      "level": 60390.65
     }
   },
   "liquidity_walls": {
     "bids": [
       {
-        "price": 61400,
-        "usd": 58814942.84386888
+        "price": 59400,
+        "usd": 51654128.69493277
       },
       {
-        "price": 61500,
-        "usd": 54109263.451575294
+        "price": 59200,
+        "usd": 44949007.057041466
       },
       {
-        "price": 61600,
-        "usd": 48793962.12705815
+        "price": 59300,
+        "usd": 44576962.86735218
       }
     ],
     "asks": [
       {
-        "price": 62200,
-        "usd": 88343078.52006352
+        "price": 60100,
+        "usd": 53020076.596359834
       },
       {
-        "price": 62300,
-        "usd": 52752144.55948073
+        "price": 60000,
+        "usd": 45123186.53532954
       },
       {
-        "price": 62600,
-        "usd": 43541375.09166282
+        "price": 60500,
+        "usd": 19271711.96815855
       }
     ],
     "books": [
@@ -49,9 +49,9 @@
       "Gate perp"
     ]
   },
-  "okx_long_short_accounts": 2.42,
+  "okx_long_short_accounts": 2.87,
   "derivatives": null,
-  "price_change_24h_pct": 1.6605332070517065,
+  "price_change_24h_pct": -3.1796826673390233,
   "fib": {
     "leg": "dn",
     "high": 64603.12,
@@ -75,27 +75,27 @@
       }
     ]
   },
-  "last_break_volume_x_avg20": 3.1413240412745598,
+  "last_break_volume_x_avg20": 5.550210153419973,
   "reading": [
     {
       "indicator": "الهيكل",
-      "state": "صاعد",
-      "detail": "آخر إشارة BOS صاعد عند 61,006"
+      "state": "هابط",
+      "detail": "آخر إشارة CHoCH هابط عند 60,391"
     },
     {
       "indicator": "Long/Short (OKX)",
-      "state": "متوازن",
-      "detail": "2.42"
+      "state": "مزدحم Long",
+      "detail": "2.87"
     },
     {
       "indicator": "جدران الأوامر",
-      "state": "متقاربة",
-      "detail": "شراء 61,400 (59M$) · بيع 62,200 (88M$)"
+      "state": "شراء أثقل",
+      "detail": "شراء 59,400 (52M$) · بيع 60,100 (53M$)"
     }
   ],
   "levels": [
-    "إغلاق ساعة فوق 61,006 يكسر آخر قمة",
-    "إغلاق ساعة تحت 60,391 يكسر آخر قاع"
+    "إغلاق ساعة فوق 60,266 يكسر آخر قمة",
+    "إغلاق ساعة تحت 58,792 يكسر آخر قاع"
   ],
   "note": "Indicator reading, not financial advice."
 }
